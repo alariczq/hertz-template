@@ -92,7 +92,7 @@ layouts:
 
       	"go.uber.org/fx"
 
-      	"{{.GoModule}}/biz/module"
+      	"{{.GoModule}}/biz/router"
       	"{{.GoModule}}/internal/server"
       	"{{.GoModule}}/pkg/handler"
       )
@@ -109,7 +109,7 @@ layouts:
       			server.NewHertzServer,
       			handler.Default,
       		),
-      		module.Modules(),
+      		router.Options(),
       		fx.Invoke(func(lc fx.Lifecycle, s *server.HertzServer) {
       			lc.Append(fx.Hook{
       				OnStart: func(ctx context.Context) error { return s.Start(ctx) },
@@ -257,7 +257,7 @@ layouts:
       - ""
     body: ""
 
-  - path: internal/service/
+  - path: biz/service/
     delims:
       - ""
       - ""
@@ -352,25 +352,7 @@ layouts:
         }
       }
 
-  - path: biz/module/ping.go
-    delims:
-      - ""
-      - ""
-    body: |-
-      package module
-
-      import (
-        "go.uber.org/fx"
-      )
-
-      func init() {
-        register(fx.Module("ping",
-          fx.Provide(pingservice.NewService, handler.NewPingHandler),
-          fx.Invoke(pingrouter.Register),
-        ))
-      }
-
-  - path: internal/service/ping/service.go
+  - path: biz/service/ping/service.go
     delims:
       - ""
       - ""
@@ -385,7 +367,7 @@ layouts:
         return &PingService{}
       }
 
-  - path: internal/service/ping/ping.impl.go
+  - path: biz/service/ping/ping.impl.go
     delims:
       - ""
       - ""
